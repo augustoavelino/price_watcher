@@ -9,11 +9,4 @@ class AppTheme {
           seedColor: AppColors.primary,
         ),
       );
-
-  static ThemeData dark() => ThemeData.from(
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.dark,
-          seedColor: AppColors.primary,
-        ),
-      );
 }

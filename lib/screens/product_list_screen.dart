@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:price_watcher/components/app_drawer.dart';
 import 'package:price_watcher/models/product.dart';
 import 'package:price_watcher/models/product_categories.dart';
 import 'package:price_watcher/models/product_category.dart';
@@ -20,6 +21,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
       appBar: AppBar(
         title: const Text('Products'),
       ),
+      drawer: const AppDrawer(),
       body: Consumer<Products>(
         builder: (consumerContext, list, _) {
           return ListView.separated(
@@ -35,8 +37,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 iconColor: item.category.color,
               );
             },
-            separatorBuilder: (builderContext, index) =>
-                const SizedBox(height: 8),
+            separatorBuilder: (builderContext, _) => const SizedBox(height: 8),
           );
         },
       ),

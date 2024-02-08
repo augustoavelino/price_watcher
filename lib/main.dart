@@ -3,6 +3,7 @@ import 'package:price_watcher/models/product_categories.dart';
 import 'package:price_watcher/models/product_category.dart';
 import 'package:price_watcher/models/products.dart';
 import 'package:price_watcher/screens/home_screen.dart';
+import 'package:price_watcher/screens/product_category_list_screen.dart';
 import 'package:price_watcher/screens/product_list_screen.dart';
 import 'package:price_watcher/themes/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -45,8 +46,12 @@ class PriceWatcher extends StatelessWidget {
     return MaterialApp(
       title: 'Price Watcher',
       theme: AppTheme.light(),
-      darkTheme: AppTheme.dark(),
-      home: const ProductListScreen(),
+      routes: {
+        '/': (context) => const HomeScreen(),
+        '/product_list': (context) => const ProductListScreen(),
+        '/product_category_list': (context) =>
+            const ProductCategoryListScreen(),
+      },
     );
   }
 }
