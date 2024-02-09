@@ -4,6 +4,7 @@ import 'package:price_watcher/models/product.dart';
 import 'package:price_watcher/models/product_categories.dart';
 import 'package:price_watcher/models/product_category.dart';
 import 'package:price_watcher/models/products.dart';
+import 'package:price_watcher/themes/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,21 +24,42 @@ class _ProductListScreenState extends State<ProductListScreen> {
       ),
       drawer: const AppDrawer(),
       body: Consumer<Products>(
-        builder: (consumerContext, list, _) {
+        builder: (consumerContext, products, _) {
           return ListView.separated(
             padding: EdgeInsets.fromLTRB(
-                20, 0, 20, MediaQuery.of(context).padding.bottom),
-            itemCount: list.length,
+                0, 0, 0, MediaQuery.of(context).padding.bottom),
+            itemCount: products.length,
             itemBuilder: (builderContext, index) {
-              final item = list.elementAt(index);
-              return ListTile(
-                title: Text(item.name),
-                subtitle: Text(item.category.name),
-                leading: Icon(item.category.icon),
-                iconColor: item.category.color,
+              final product = products.elementAt(index);
+              return Dismissible(
+                key: UniqueKey(),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: AppColors.destructiveAction,
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.only(right: 8),
+                  child: const Icon(
+                    Icons.delete_forever_rounded,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+                confirmDismiss: (_) =>
+                    _showDeleteConfimationDialog(context, product),
+                onDismissed: (_) => products.removeAt(index),
+                child: ListTile(
+                  title: Text(product.name),
+                  subtitle: Text(product.category.name),
+                  leading: Icon(
+                    product.category.icon,
+                    size: 32,
+                  ),
+                  iconColor: product.category.color,
+                  minVerticalPadding: 0,
+                ),
               );
             },
-            separatorBuilder: (builderContext, _) => const SizedBox(height: 8),
+            separatorBuilder: (builderContext, _) => const Divider(height: 0),
           );
         },
       ),
@@ -103,7 +125,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 builder: (consumerContext, products, _) => TextButton(
                       onPressed: () async {
                         products.add(Product(
-                          id: const Uuid().v8(),
+                          id: const Uuid().v4(),
                           name: nameController.text,
                           category: selectedCategory,
                           image: null,
@@ -120,5 +142,32 @@ class _ProductListScreenState extends State<ProductListScreen> {
         );
       }),
     );
+  }
+
+  Future<bool?> _showDeleteConfimationDialog(
+      BuildContext context, Product product) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Removing product'),
+        content: Text('Are you sure you want to delete\n\'${product.name}\'?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: ButtonStyle(
+                foregroundColor:
+                    const MaterialStatePropertyAll(AppColors.destructiveAction),
+                overlayColor: MaterialStatePropertyAll(
+                    AppColors.destructiveAction.withOpacity(0.15))),
+            child: const Text('Delete'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+    return result;
   }
 }

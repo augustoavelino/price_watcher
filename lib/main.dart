@@ -7,8 +7,10 @@ import 'package:price_watcher/screens/product_category_list_screen.dart';
 import 'package:price_watcher/screens/product_list_screen.dart';
 import 'package:price_watcher/themes/app_theme.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
+  const uuid = Uuid();
   runApp(
     MultiProvider(
       providers: [
@@ -16,20 +18,30 @@ void main() {
         ChangeNotifierProvider(
           create: (context) => ProductCategories([
             ProductCategory(
-                id: '001',
+                id: uuid.v4(),
                 name: 'Groceries',
-                icon: Icons.free_breakfast_rounded,
-                color: Colors.blue),
-            ProductCategory(
-                id: '002',
-                name: 'Drinks',
-                icon: Icons.local_drink_rounded,
+                icon: Icons.coffee,
                 color: Colors.orange),
             ProductCategory(
-                id: '003',
-                name: 'Utilities',
-                icon: Icons.gas_meter_rounded,
-                color: Colors.blueGrey),
+                id: uuid.v4(),
+                name: 'Party',
+                icon: Icons.nightlife,
+                color: Colors.deepPurple),
+            ProductCategory(
+                id: uuid.v4(),
+                name: 'Gaming',
+                icon: Icons.videogame_asset,
+                color: Colors.blue),
+            ProductCategory(
+                id: uuid.v4(),
+                name: 'Health',
+                icon: Icons.health_and_safety,
+                color: Colors.green),
+            ProductCategory(
+                id: uuid.v4(),
+                name: 'Streaming',
+                icon: Icons.ondemand_video,
+                color: Colors.red),
           ]),
         ),
       ],
